@@ -21,7 +21,6 @@ export async function hindsightApiRequest(
 	}
 
 	if (qs && Object.keys(qs).length > 0) {
-		// Filter out undefined values
 		const cleanQs: Record<string, string | number | boolean> = {};
 		for (const [key, value] of Object.entries(qs)) {
 			if (value !== undefined) {
