@@ -92,11 +92,10 @@ Plans:
   1. User can get the current resolved configuration for a bank
   2. User can update bank configuration with key-value pairs and reset to server defaults
   3. User can update a bank's disposition (skepticism, literalism, empathy on 1-5 scale)
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
+- [x] 05-01-PLAN.md — Add updateDisposition, getConfig, updateConfig, resetConfig operations to Bank resource
 
 ### Phase 6: Bank Utilities & Memory Management
 **Goal**: Users can trigger consolidation, browse tags, clear observations, and manage individual memories

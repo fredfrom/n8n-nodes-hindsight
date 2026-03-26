@@ -32,10 +32,10 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **BANK-03**: Bank > Get Profile — `GET /v1/default/banks/{bank_id}/profile` returning bank profile
 - [x] **BANK-04**: Bank > Get Stats — `GET /v1/default/banks/{bank_id}/stats` returning bank statistics
 - [x] **BANK-05**: Bank > Delete — `DELETE /v1/default/banks/{bank_id}` with confirmation awareness
-- [ ] **BANK-06**: Bank > Update Disposition — `PUT /v1/default/banks/{bank_id}/profile` with skepticism/literalism/empathy (1-5 each)
-- [ ] **BANK-07**: Bank > Get Config — `GET /v1/default/banks/{bank_id}/config` returning resolved config + overrides
-- [ ] **BANK-08**: Bank > Update Config — `PATCH /v1/default/banks/{bank_id}/config` with free-form key-value config updates
-- [ ] **BANK-09**: Bank > Reset Config — `DELETE /v1/default/banks/{bank_id}/config` resetting to server defaults
+- [x] **BANK-06**: Bank > Update Disposition — `PUT /v1/default/banks/{bank_id}/profile` with skepticism/literalism/empathy (1-5 each)
+- [x] **BANK-07**: Bank > Get Config — `GET /v1/default/banks/{bank_id}/config` returning resolved config + overrides
+- [x] **BANK-08**: Bank > Update Config — `PATCH /v1/default/banks/{bank_id}/config` with free-form key-value config updates
+- [x] **BANK-09**: Bank > Reset Config — `DELETE /v1/default/banks/{bank_id}/config` resetting to server defaults
 - [ ] **BANK-10**: Bank > Consolidate — `POST /v1/default/banks/{bank_id}/consolidate` triggering observation synthesis
 - [ ] **BANK-11**: Bank > List Tags — `GET /v1/default/banks/{bank_id}/tags` with optional search, limit, offset
 - [ ] **BANK-12**: Bank > Clear Observations — `DELETE /v1/default/banks/{bank_id}/observations`
@@ -168,10 +168,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MEM-01 | Phase 4 | Complete |
 | MEM-02 | Phase 4 | Complete |
 | MEM-03 | Phase 4 | Complete |
-| BANK-06 | Phase 5 | Pending |
-| BANK-07 | Phase 5 | Pending |
-| BANK-08 | Phase 5 | Pending |
-| BANK-09 | Phase 5 | Pending |
+| BANK-06 | Phase 5 | Complete |
+| BANK-07 | Phase 5 | Complete |
+| BANK-08 | Phase 5 | Complete |
+| BANK-09 | Phase 5 | Complete |
 | BANK-10 | Phase 6 | Pending |
 | BANK-11 | Phase 6 | Pending |
 | BANK-12 | Phase 6 | Pending |
