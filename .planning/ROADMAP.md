@@ -81,8 +81,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Memory resource property definitions (operation dropdown + retain/recall/reflect field files)
-- [ ] 04-02-PLAN.md — Wire memoryDescription into node and implement all 3 Memory operations in execute method
+- [x] 04-01-PLAN.md — Memory resource property definitions (operation dropdown + retain/recall/reflect field files)
+- [x] 04-02-PLAN.md — Wire memoryDescription into node and implement all 3 Memory operations in execute method
 
 ### Phase 5: Bank Configuration & Disposition
 **Goal**: Users can fine-tune how a bank processes and reasons about memories

@@ -42,9 +42,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Memory Resource
 
-- [ ] **MEM-01**: Memory > Retain — `POST /v1/default/banks/{bank_id}/memories` with content (required), plus Additional Fields: timestamp, context, metadata, document_id, entities, tags, observation_scopes, strategy, async
-- [ ] **MEM-02**: Memory > Recall — `POST /v1/default/banks/{bank_id}/memories/recall` with query (required), plus Additional Fields: types, budget, max_tokens, trace, query_timestamp, tags, tags_match, include options
-- [ ] **MEM-03**: Memory > Reflect — `POST /v1/default/banks/{bank_id}/reflect` with query (required), plus Additional Fields: budget, max_tokens, response_schema (JSON), tags, tags_match, include.facts, include.tool_calls
+- [x] **MEM-01**: Memory > Retain — `POST /v1/default/banks/{bank_id}/memories` with content (required), plus Additional Fields: timestamp, context, metadata, document_id, entities, tags, observation_scopes, strategy, async
+- [x] **MEM-02**: Memory > Recall — `POST /v1/default/banks/{bank_id}/memories/recall` with query (required), plus Additional Fields: types, budget, max_tokens, trace, query_timestamp, tags, tags_match, include options
+- [x] **MEM-03**: Memory > Reflect — `POST /v1/default/banks/{bank_id}/reflect` with query (required), plus Additional Fields: budget, max_tokens, response_schema (JSON), tags, tags_match, include.facts, include.tool_calls
 - [ ] **MEM-04**: Memory > List — `GET /v1/default/banks/{bank_id}/memories/list` with optional type, search, limit, offset
 - [ ] **MEM-05**: Memory > Get — `GET /v1/default/banks/{bank_id}/memories/{memory_id}`
 - [ ] **MEM-06**: Memory > Clear — `DELETE /v1/default/banks/{bank_id}/memories` with optional type filter
@@ -165,9 +165,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UX-03 | Phase 3 | Complete |
 | UX-04 | Phase 3 | Complete |
 | UX-05 | Phase 3 | Complete |
-| MEM-01 | Phase 4 | Pending |
-| MEM-02 | Phase 4 | Pending |
-| MEM-03 | Phase 4 | Pending |
+| MEM-01 | Phase 4 | Complete |
+| MEM-02 | Phase 4 | Complete |
+| MEM-03 | Phase 4 | Complete |
 | BANK-06 | Phase 5 | Pending |
 | BANK-07 | Phase 5 | Pending |
 | BANK-08 | Phase 5 | Pending |
