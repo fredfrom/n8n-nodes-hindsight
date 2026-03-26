@@ -8,6 +8,7 @@ import type {
 } from 'n8n-workflow';
 import { NodeConnectionTypes, NodeApiError } from 'n8n-workflow';
 import { hindsightApiRequest } from './transport';
+import { bankDescription } from './resources/bank';
 
 export class Hindsight implements INodeType {
 	description: INodeTypeDescription = {
@@ -44,26 +45,7 @@ export class Hindsight implements INodeType {
 				],
 				default: 'bank',
 			},
-			{
-				displayName: 'Operation',
-				name: 'operation',
-				type: 'options',
-				noDataExpression: true,
-				displayOptions: {
-					show: {
-						resource: ['bank'],
-					},
-				},
-				options: [
-					{
-						name: 'List',
-						value: 'list',
-						description: 'List all banks',
-						action: 'List all banks',
-					},
-				],
-				default: 'list',
-			},
+			...bankDescription,
 		],
 	};
 
@@ -78,8 +60,52 @@ export class Hindsight implements INodeType {
 				let responseData: unknown;
 
 				if (resource === 'bank') {
-					if (operation === 'list') {
-						responseData = await hindsightApiRequest.call(this, 'GET', '/v1/default/banks');
+					if (operation === 'createOrUpdate') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+						const body: IDataObject = {};
+						if (additionalFields.name) {
+							body.name = additionalFields.name;
+						}
+						if (additionalFields.mission) {
+							body.mission = additionalFields.mission;
+						}
+						responseData = await hindsightApiRequest.call(
+							this,
+							'PUT',
+							`/v1/default/banks/${bankId}`,
+							body,
+						);
+					} else if (operation === 'list') {
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							'/v1/default/banks',
+						);
+					} else if (operation === 'getProfile') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/profile`,
+						);
+					} else if (operation === 'getStats') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/stats`,
+						);
+					} else if (operation === 'delete') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'DELETE',
+							`/v1/default/banks/${bankId}`,
+						);
 					}
 				}
 
