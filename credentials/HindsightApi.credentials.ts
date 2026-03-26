@@ -12,6 +12,8 @@ export class HindsightApi implements ICredentialType {
 
 	documentationUrl = 'https://hindsight.vectorize.io';
 
+	icon = 'file:hindsight.svg' as const;
+
 	properties: INodeProperties[] = [
 		{
 			displayName: 'API Key',

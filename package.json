@@ -8,8 +8,7 @@
 		"n8n-community-node-package"
 	],
 	"author": {
-		"name": "Friedemann Frommelt",
-		"email": ""
+		"name": "Friedemann Frommelt"
 	},
 	"repository": {
 		"type": "git",
