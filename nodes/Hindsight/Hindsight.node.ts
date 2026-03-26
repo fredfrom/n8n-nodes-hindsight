@@ -112,6 +112,43 @@ export class Hindsight implements INodeType {
 							'DELETE',
 							`/v1/default/banks/${bankId}`,
 						);
+					} else if (operation === 'updateDisposition') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const skepticism = this.getNodeParameter('skepticism', i) as number;
+						const literalism = this.getNodeParameter('literalism', i) as number;
+						const empathy = this.getNodeParameter('empathy', i) as number;
+						const body = { disposition: { skepticism, literalism, empathy } };
+						responseData = await hindsightApiRequest.call(
+							this,
+							'PUT',
+							`/v1/default/banks/${bankId}/profile`,
+							body,
+						);
+					} else if (operation === 'getConfig') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/config`,
+						);
+					} else if (operation === 'updateConfig') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const updatesJson = this.getNodeParameter('updates', i) as string;
+						const updates = JSON.parse(updatesJson);
+						const body = { updates };
+						responseData = await hindsightApiRequest.call(
+							this,
+							'PATCH',
+							`/v1/default/banks/${bankId}/config`,
+							body,
+						);
+					} else if (operation === 'resetConfig') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'DELETE',
+							`/v1/default/banks/${bankId}/config`,
+						);
 					}
 				} else if (resource === 'memory') {
 					if (operation === 'retain') {

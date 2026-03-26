@@ -1,9 +1,13 @@
 import type { INodeProperties } from 'n8n-workflow';
 import { bankCreateOrUpdateFields } from './createOrUpdate';
 import { bankDeleteFields } from './delete';
+import { bankGetConfigFields } from './getConfig';
 import { bankGetProfileFields } from './getProfile';
 import { bankGetStatsFields } from './getStats';
 import { bankListFields } from './list';
+import { bankResetConfigFields } from './resetConfig';
+import { bankUpdateConfigFields } from './updateConfig';
+import { bankUpdateDispositionFields } from './updateDisposition';
 
 const operations: INodeProperties = {
 	displayName: 'Operation',
@@ -29,6 +33,12 @@ const operations: INodeProperties = {
 			action: 'Delete a bank',
 		},
 		{
+			name: 'Get Config',
+			value: 'getConfig',
+			description: 'Get the resolved configuration for a bank',
+			action: 'Get bank configuration',
+		},
+		{
 			name: 'Get Profile',
 			value: 'getProfile',
 			description: 'Get the profile of a bank',
@@ -46,6 +56,24 @@ const operations: INodeProperties = {
 			description: 'List all banks',
 			action: 'List all banks',
 		},
+		{
+			name: 'Reset Config',
+			value: 'resetConfig',
+			description: 'Reset bank configuration to server defaults',
+			action: 'Reset bank configuration',
+		},
+		{
+			name: 'Update Config',
+			value: 'updateConfig',
+			description: 'Update bank configuration overrides',
+			action: 'Update bank configuration',
+		},
+		{
+			name: 'Update Disposition',
+			value: 'updateDisposition',
+			description: 'Update bank personality traits (skepticism, literalism, empathy)',
+			action: 'Update bank disposition',
+		},
 	],
 	default: 'list',
 };
@@ -54,7 +82,11 @@ export const bankDescription: INodeProperties[] = [
 	operations,
 	...bankCreateOrUpdateFields,
 	...bankDeleteFields,
+	...bankGetConfigFields,
 	...bankGetProfileFields,
 	...bankGetStatsFields,
 	...bankListFields,
+	...bankResetConfigFields,
+	...bankUpdateConfigFields,
+	...bankUpdateDispositionFields,
 ];
