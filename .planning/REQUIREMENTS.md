@@ -99,9 +99,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **UX-01**: Resource dropdown groups operations logically (Bank, Memory, Directive, Mental Model, Document, Entity, Operation, Webhook)
 - [x] **UX-02**: Required fields shown upfront; optional fields in "Additional Fields" collection per operation
-- [ ] **UX-03**: All operations return raw JSON response from the API
-- [ ] **UX-04**: Error handling uses `continueOnFail()` pattern with `NodeApiError` for every operation
-- [ ] **UX-05**: Multi-item support — node processes all input items in a loop
+- [x] **UX-03**: All operations return raw JSON response from the API
+- [x] **UX-04**: Error handling uses `continueOnFail()` pattern with `NodeApiError` for every operation
+- [x] **UX-05**: Multi-item support — node processes all input items in a loop
 
 ### Documentation
 
@@ -162,9 +162,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BANK-05 | Phase 3 | Complete |
 | UX-01 | Phase 3 | Complete |
 | UX-02 | Phase 3 | Complete |
-| UX-03 | Phase 3 | Pending |
-| UX-04 | Phase 3 | Pending |
-| UX-05 | Phase 3 | Pending |
+| UX-03 | Phase 3 | Complete |
+| UX-04 | Phase 3 | Complete |
+| UX-05 | Phase 3 | Complete |
 | MEM-01 | Phase 4 | Pending |
 | MEM-02 | Phase 4 | Pending |
 | MEM-03 | Phase 4 | Pending |

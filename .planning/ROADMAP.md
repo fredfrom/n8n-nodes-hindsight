@@ -67,7 +67,7 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md — Bank resource property definitions (operation dropdown + per-operation field files)
-- [ ] 03-02-PLAN.md — Wire bankDescription into node and implement all 5 Bank operations in execute method
+- [x] 03-02-PLAN.md — Wire bankDescription into node and implement all 5 Bank operations in execute method
 
 ### Phase 4: Core Memory Operations
 **Goal**: Users can store memories, search memories, and get AI-generated responses from memories -- the core value of Hindsight
