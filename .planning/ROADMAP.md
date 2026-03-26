@@ -66,7 +66,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Bank resource property definitions (operation dropdown + per-operation field files)
+- [x] 03-01-PLAN.md — Bank resource property definitions (operation dropdown + per-operation field files)
 - [ ] 03-02-PLAN.md — Wire bankDescription into node and implement all 5 Bank operations in execute method
 
 ### Phase 4: Core Memory Operations
@@ -184,7 +184,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 |-------|----------------|--------|-----------|
 | 1. Project Scaffolding | 0/1 | Planning complete | - |
 | 2. Credentials & Transport | 0/1 | Planning complete | - |
-| 3. Bank Core Operations | 0/2 | Planning complete | - |
+| 3. Bank Core Operations | 1/2 | In Progress|  |
 | 4. Core Memory Operations | 0/3 | Not started | - |
 | 5. Bank Configuration & Disposition | 0/2 | Not started | - |
 | 6. Bank Utilities & Memory Management | 0/2 | Not started | - |
