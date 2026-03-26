@@ -78,12 +78,11 @@ Plans:
   2. User can recall (search) memories with a query and optional type filters, budget, max_tokens, trace, tags, and include options
   3. User can reflect (generate AI response) with a query and optional budget, max_tokens, response_schema, tags, and include options
   4. All three operations expose required fields upfront and optional fields in Additional Fields collections
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
-- [ ] 04-03: TBD
+- [ ] 04-01-PLAN.md — Memory resource property definitions (operation dropdown + retain/recall/reflect field files)
+- [ ] 04-02-PLAN.md — Wire memoryDescription into node and implement all 3 Memory operations in execute method
 
 ### Phase 5: Bank Configuration & Disposition
 **Goal**: Users can fine-tune how a bank processes and reasons about memories
@@ -185,7 +184,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 1. Project Scaffolding | 0/1 | Planning complete | - |
 | 2. Credentials & Transport | 0/1 | Planning complete | - |
 | 3. Bank Core Operations | 1/2 | In Progress|  |
-| 4. Core Memory Operations | 0/3 | Not started | - |
+| 4. Core Memory Operations | 0/2 | Planning complete | - |
 | 5. Bank Configuration & Disposition | 0/2 | Not started | - |
 | 6. Bank Utilities & Memory Management | 0/2 | Not started | - |
 | 7. Directives | 0/2 | Not started | - |
