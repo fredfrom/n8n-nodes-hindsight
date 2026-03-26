@@ -1,10 +1,13 @@
 import type { INodeProperties } from 'n8n-workflow';
+import { bankClearObservationsFields } from './clearObservations';
+import { bankConsolidateFields } from './consolidate';
 import { bankCreateOrUpdateFields } from './createOrUpdate';
 import { bankDeleteFields } from './delete';
 import { bankGetConfigFields } from './getConfig';
 import { bankGetProfileFields } from './getProfile';
 import { bankGetStatsFields } from './getStats';
 import { bankListFields } from './list';
+import { bankListTagsFields } from './listTags';
 import { bankResetConfigFields } from './resetConfig';
 import { bankUpdateConfigFields } from './updateConfig';
 import { bankUpdateDispositionFields } from './updateDisposition';
@@ -20,6 +23,18 @@ const operations: INodeProperties = {
 		},
 	},
 	options: [
+		{
+			name: 'Clear Observations',
+			value: 'clearObservations',
+			description: 'Clear all observations in a bank',
+			action: 'Clear bank observations',
+		},
+		{
+			name: 'Consolidate',
+			value: 'consolidate',
+			description: 'Trigger observation synthesis for a bank',
+			action: 'Consolidate a bank',
+		},
 		{
 			name: 'Create or Update',
 			value: 'createOrUpdate',
@@ -57,6 +72,12 @@ const operations: INodeProperties = {
 			action: 'List all banks',
 		},
 		{
+			name: 'List Tags',
+			value: 'listTags',
+			description: 'List tags used in a bank with counts',
+			action: 'List bank tags',
+		},
+		{
 			name: 'Reset Config',
 			value: 'resetConfig',
 			description: 'Reset bank configuration to server defaults',
@@ -80,12 +101,15 @@ const operations: INodeProperties = {
 
 export const bankDescription: INodeProperties[] = [
 	operations,
+	...bankClearObservationsFields,
+	...bankConsolidateFields,
 	...bankCreateOrUpdateFields,
 	...bankDeleteFields,
 	...bankGetConfigFields,
 	...bankGetProfileFields,
 	...bankGetStatsFields,
 	...bankListFields,
+	...bankListTagsFields,
 	...bankResetConfigFields,
 	...bankUpdateConfigFields,
 	...bankUpdateDispositionFields,

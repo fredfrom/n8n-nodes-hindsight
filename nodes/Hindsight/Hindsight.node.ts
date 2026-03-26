@@ -9,6 +9,7 @@ import type {
 import { NodeConnectionTypes, NodeApiError } from 'n8n-workflow';
 import { hindsightApiRequest } from './transport';
 import { bankDescription } from './resources/bank';
+import { directiveDescription } from './resources/directive';
 import { memoryDescription } from './resources/memory';
 
 export class Hindsight implements INodeType {
@@ -44,6 +45,10 @@ export class Hindsight implements INodeType {
 						value: 'bank',
 					},
 					{
+						name: 'Directive',
+						value: 'directive',
+					},
+					{
 						name: 'Memory',
 						value: 'memory',
 					},
@@ -51,6 +56,7 @@ export class Hindsight implements INodeType {
 				default: 'bank',
 			},
 			...bankDescription,
+			...directiveDescription,
 			...memoryDescription,
 		],
 	};
@@ -66,7 +72,21 @@ export class Hindsight implements INodeType {
 				let responseData: unknown;
 
 				if (resource === 'bank') {
-					if (operation === 'createOrUpdate') {
+					if (operation === 'clearObservations') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'DELETE',
+							`/v1/default/banks/${bankId}/observations`,
+						);
+					} else if (operation === 'consolidate') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'POST',
+							`/v1/default/banks/${bankId}/consolidate`,
+						);
+					} else if (operation === 'createOrUpdate') {
 						const bankId = this.getNodeParameter('bankId', i) as string;
 						const additionalFields = this.getNodeParameter(
 							'additionalFields',
@@ -90,6 +110,29 @@ export class Hindsight implements INodeType {
 							this,
 							'GET',
 							'/v1/default/banks',
+						);
+					} else if (operation === 'listTags') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+						const qs: Record<string, string | number | boolean | undefined> = {};
+						if (additionalFields.q) {
+							qs.q = additionalFields.q as string;
+						}
+						if (additionalFields.limit) {
+							qs.limit = additionalFields.limit as number;
+						}
+						if (additionalFields.offset) {
+							qs.offset = additionalFields.offset as number;
+						}
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/tags`,
+							undefined,
+							qs,
 						);
 					} else if (operation === 'getProfile') {
 						const bankId = this.getNodeParameter('bankId', i) as string;
@@ -150,8 +193,157 @@ export class Hindsight implements INodeType {
 							`/v1/default/banks/${bankId}/config`,
 						);
 					}
+				} else if (resource === 'directive') {
+					if (operation === 'create') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const name = this.getNodeParameter('name', i) as string;
+						const directiveContent = this.getNodeParameter('content', i) as string;
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+
+						const body: IDataObject = { name, content: directiveContent };
+
+						if (additionalFields.priority !== undefined) {
+							body.priority = additionalFields.priority;
+						}
+						if (additionalFields.isActive !== undefined) {
+							body.is_active = additionalFields.isActive;
+						}
+						if (additionalFields.tags) {
+							body.tags = (additionalFields.tags as string)
+								.split(',')
+								.map((t: string) => t.trim())
+								.filter((t: string) => t);
+						}
+
+						responseData = await hindsightApiRequest.call(
+							this,
+							'POST',
+							`/v1/default/banks/${bankId}/directives`,
+							body,
+						);
+					} else if (operation === 'delete') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const directiveId = this.getNodeParameter('directiveId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'DELETE',
+							`/v1/default/banks/${bankId}/directives/${directiveId}`,
+						);
+					} else if (operation === 'get') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const directiveId = this.getNodeParameter('directiveId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/directives/${directiveId}`,
+						);
+					} else if (operation === 'list') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/directives`,
+						);
+					} else if (operation === 'update') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const directiveId = this.getNodeParameter('directiveId', i) as string;
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+
+						const body: IDataObject = {};
+
+						if (additionalFields.name) {
+							body.name = additionalFields.name;
+						}
+						if (additionalFields.content) {
+							body.content = additionalFields.content;
+						}
+						if (additionalFields.priority !== undefined) {
+							body.priority = additionalFields.priority;
+						}
+						if (additionalFields.isActive !== undefined) {
+							body.is_active = additionalFields.isActive;
+						}
+						if (additionalFields.tags) {
+							body.tags = (additionalFields.tags as string)
+								.split(',')
+								.map((t: string) => t.trim())
+								.filter((t: string) => t);
+						}
+
+						responseData = await hindsightApiRequest.call(
+							this,
+							'PATCH',
+							`/v1/default/banks/${bankId}/directives/${directiveId}`,
+							body,
+						);
+					}
 				} else if (resource === 'memory') {
-					if (operation === 'retain') {
+					if (operation === 'clear') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+						const qs: Record<string, string | number | boolean | undefined> = {};
+						if (additionalFields.type) {
+							qs.type = additionalFields.type as string;
+						}
+						responseData = await hindsightApiRequest.call(
+							this,
+							'DELETE',
+							`/v1/default/banks/${bankId}/memories`,
+							undefined,
+							qs,
+						);
+					} else if (operation === 'clearObservations') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const memoryId = this.getNodeParameter('memoryId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'DELETE',
+							`/v1/default/banks/${bankId}/memories/${memoryId}/observations`,
+						);
+					} else if (operation === 'get') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const memoryId = this.getNodeParameter('memoryId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/memories/${memoryId}`,
+						);
+					} else if (operation === 'list') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+						const qs: Record<string, string | number | boolean | undefined> = {};
+						if (additionalFields.type) {
+							qs.type = additionalFields.type as string;
+						}
+						if (additionalFields.q) {
+							qs.q = additionalFields.q as string;
+						}
+						if (additionalFields.limit) {
+							qs.limit = additionalFields.limit as number;
+						}
+						if (additionalFields.offset) {
+							qs.offset = additionalFields.offset as number;
+						}
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/memories/list`,
+							undefined,
+							qs,
+						);
+					} else if (operation === 'retain') {
 						const bankId = this.getNodeParameter('bankId', i) as string;
 						const content = this.getNodeParameter('content', i) as string;
 						const additionalFields = this.getNodeParameter(
