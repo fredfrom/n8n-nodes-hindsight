@@ -10,7 +10,11 @@ import { NodeConnectionTypes, NodeApiError } from 'n8n-workflow';
 import { hindsightApiRequest } from './transport';
 import { bankDescription } from './resources/bank';
 import { directiveDescription } from './resources/directive';
+import { documentDescription } from './resources/document';
+import { entityDescription } from './resources/entity';
 import { memoryDescription } from './resources/memory';
+import { mentalModelDescription } from './resources/mentalModel';
+import { operationDescription } from './resources/operation';
 
 export class Hindsight implements INodeType {
 	description: INodeTypeDescription = {
@@ -49,15 +53,35 @@ export class Hindsight implements INodeType {
 						value: 'directive',
 					},
 					{
+						name: 'Document',
+						value: 'document',
+					},
+					{
+						name: 'Entity',
+						value: 'entity',
+					},
+					{
 						name: 'Memory',
 						value: 'memory',
+					},
+					{
+						name: 'Mental Model',
+						value: 'mentalModel',
+					},
+					{
+						name: 'Operation',
+						value: 'operation',
 					},
 				],
 				default: 'bank',
 			},
 			...bankDescription,
 			...directiveDescription,
+			...documentDescription,
+			...entityDescription,
 			...memoryDescription,
+			...mentalModelDescription,
+			...operationDescription,
 		],
 	};
 
@@ -528,7 +552,282 @@ export class Hindsight implements INodeType {
 							body,
 						);
 					}
-				}
+				} else if (resource === 'document') {
+					if (operation === 'list') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+						const qs: Record<string, string | number | boolean | undefined> = {};
+						if (additionalFields.q) {
+							qs.q = additionalFields.q as string;
+						}
+						if (additionalFields.tags) {
+							const tagsStr = additionalFields.tags as string;
+							qs.tags = tagsStr
+								.split(',')
+								.map((t: string) => t.trim())
+								.filter((t: string) => t)
+								.join(',');
+						}
+						if (additionalFields.tagsMatch) {
+							qs.tags_match = additionalFields.tagsMatch as string;
+						}
+						if (additionalFields.limit) {
+							qs.limit = additionalFields.limit as number;
+						}
+						if (additionalFields.offset) {
+							qs.offset = additionalFields.offset as number;
+						}
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/documents`,
+							undefined,
+							qs,
+						);
+					} else if (operation === 'get') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const documentId = this.getNodeParameter('documentId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/documents/${documentId}`,
+						);
+					} else if (operation === 'updateTags') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const documentId = this.getNodeParameter('documentId', i) as string;
+						const tagsStr = this.getNodeParameter('tags', i) as string;
+						const tags = tagsStr
+							.split(',')
+							.map((t: string) => t.trim())
+							.filter((t: string) => t);
+						const body = { tags };
+						responseData = await hindsightApiRequest.call(
+							this,
+							'PATCH',
+							`/v1/default/banks/${bankId}/documents/${documentId}`,
+							body,
+						);
+					} else if (operation === 'delete') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const documentId = this.getNodeParameter('documentId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'DELETE',
+							`/v1/default/banks/${bankId}/documents/${documentId}`,
+						);
+					}
+				} else if (resource === 'entity') {
+					if (operation === 'list') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+						const qs: Record<string, string | number | boolean | undefined> = {};
+						if (additionalFields.limit) {
+							qs.limit = additionalFields.limit as number;
+						}
+						if (additionalFields.offset) {
+							qs.offset = additionalFields.offset as number;
+						}
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/entities`,
+							undefined,
+							qs,
+						);
+					} else if (operation === 'get') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const entityId = this.getNodeParameter('entityId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/entities/${entityId}`,
+						);
+					}
+				} else if (resource === 'operation') {
+					if (operation === 'list') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/operations`,
+						);
+					} else if (operation === 'get') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const operationId = this.getNodeParameter('operationId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/operations/${operationId}`,
+						);
+					} else if (operation === 'cancel') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const operationId = this.getNodeParameter('operationId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'DELETE',
+							`/v1/default/banks/${bankId}/operations/${operationId}`,
+						);
+					} else if (operation === 'retry') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const operationId = this.getNodeParameter('operationId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'POST',
+							`/v1/default/banks/${bankId}/operations/${operationId}/retry`,
+						);
+					}
+				} } else if (resource === 'mentalModel') {
+					if (operation === 'create') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const name = this.getNodeParameter('name', i) as string;
+						const sourceQuery = this.getNodeParameter('sourceQuery', i) as string;
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+
+						const body: IDataObject = { name, source_query: sourceQuery };
+
+						if (additionalFields.id) {
+							body.id = additionalFields.id;
+						}
+						if (additionalFields.maxTokens) {
+							body.max_tokens = additionalFields.maxTokens;
+						}
+						if (additionalFields.tags) {
+							body.tags = (additionalFields.tags as string)
+								.split(',')
+								.map((t: string) => t.trim())
+								.filter((t: string) => t);
+						}
+						if (additionalFields.trigger) {
+							const triggerObj = additionalFields.trigger as IDataObject;
+							const config = (triggerObj.triggerConfig as IDataObject[])?.[0];
+							if (config) {
+								const trigger: IDataObject = {};
+								if (config.refreshAfterConsolidation !== undefined) {
+									trigger.refresh_after_consolidation =
+										config.refreshAfterConsolidation;
+								}
+								if (
+									config.factTypes &&
+									(config.factTypes as string[]).length > 0
+								) {
+									trigger.fact_types = config.factTypes;
+								}
+								if (config.excludeMentalModels !== undefined) {
+									trigger.exclude_mental_models = config.excludeMentalModels;
+								}
+								body.trigger = trigger;
+							}
+						}
+
+						responseData = await hindsightApiRequest.call(
+							this,
+							'POST',
+							`/v1/default/banks/${bankId}/mental-models`,
+							body,
+						);
+					} else if (operation === 'delete') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const mentalModelId = this.getNodeParameter('mentalModelId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'DELETE',
+							`/v1/default/banks/${bankId}/mental-models/${mentalModelId}`,
+						);
+					} else if (operation === 'get') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const mentalModelId = this.getNodeParameter('mentalModelId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/mental-models/${mentalModelId}`,
+						);
+					} else if (operation === 'getHistory') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const mentalModelId = this.getNodeParameter('mentalModelId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/mental-models/${mentalModelId}/history`,
+						);
+					} else if (operation === 'list') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/mental-models`,
+						);
+					} else if (operation === 'refresh') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const mentalModelId = this.getNodeParameter('mentalModelId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'POST',
+							`/v1/default/banks/${bankId}/mental-models/${mentalModelId}/refresh`,
+						);
+					} else if (operation === 'update') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const mentalModelId = this.getNodeParameter('mentalModelId', i) as string;
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+
+						const body: IDataObject = {};
+
+						if (additionalFields.name) {
+							body.name = additionalFields.name;
+						}
+						if (additionalFields.sourceQuery) {
+							body.source_query = additionalFields.sourceQuery;
+						}
+						if (additionalFields.maxTokens) {
+							body.max_tokens = additionalFields.maxTokens;
+						}
+						if (additionalFields.tags) {
+							body.tags = (additionalFields.tags as string)
+								.split(',')
+								.map((t: string) => t.trim())
+								.filter((t: string) => t);
+						}
+						if (additionalFields.trigger) {
+							const triggerObj = additionalFields.trigger as IDataObject;
+							const config = (triggerObj.triggerConfig as IDataObject[])?.[0];
+							if (config) {
+								const trigger: IDataObject = {};
+								if (config.refreshAfterConsolidation !== undefined) {
+									trigger.refresh_after_consolidation =
+										config.refreshAfterConsolidation;
+								}
+								if (
+									config.factTypes &&
+									(config.factTypes as string[]).length > 0
+								) {
+									trigger.fact_types = config.factTypes;
+								}
+								if (config.excludeMentalModels !== undefined) {
+									trigger.exclude_mental_models = config.excludeMentalModels;
+								}
+								body.trigger = trigger;
+							}
+						}
+
+						responseData = await hindsightApiRequest.call(
+							this,
+							'PATCH',
+							`/v1/default/banks/${bankId}/mental-models/${mentalModelId}`,
+							body,
+						);
+					}
+				
 
 				const executionData = this.helpers.constructExecutionMetaData(
 					this.helpers.returnJsonArray(responseData as IDataObject | IDataObject[]),
