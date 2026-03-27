@@ -1,3 +1,12 @@
+# GSD planning artifacts (local only)
 .planning/
+
+# Claude Code config
+.claude/
+CLAUDE.md
+
+# Build output
 dist
+
+# Dependencies
 node_modules
