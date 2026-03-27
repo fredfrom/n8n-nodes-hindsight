@@ -15,6 +15,7 @@ import { entityDescription } from './resources/entity';
 import { memoryDescription } from './resources/memory';
 import { mentalModelDescription } from './resources/mentalModel';
 import { operationDescription } from './resources/operation';
+import { webhookDescription } from './resources/webhook';
 
 export class Hindsight implements INodeType {
 	description: INodeTypeDescription = {
@@ -72,6 +73,10 @@ export class Hindsight implements INodeType {
 						name: 'Operation',
 						value: 'operation',
 					},
+					{
+						name: 'Webhook',
+						value: 'webhook',
+					},
 				],
 				default: 'bank',
 			},
@@ -82,6 +87,7 @@ export class Hindsight implements INodeType {
 			...memoryDescription,
 			...mentalModelDescription,
 			...operationDescription,
+			...webhookDescription,
 		],
 	};
 
@@ -825,6 +831,177 @@ export class Hindsight implements INodeType {
 							'PATCH',
 							`/v1/default/banks/${bankId}/mental-models/${mentalModelId}`,
 							body,
+						);
+					}
+				} else if (resource === 'webhook') {
+					if (operation === 'create') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const url = this.getNodeParameter('url', i) as string;
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+
+						const body: IDataObject = { url };
+
+						if (additionalFields.secret) {
+							body.secret = additionalFields.secret;
+						}
+						if (
+							additionalFields.eventTypes &&
+							(additionalFields.eventTypes as string[]).length > 0
+						) {
+							body.event_types = additionalFields.eventTypes;
+						}
+						if (additionalFields.enabled !== undefined) {
+							body.enabled = additionalFields.enabled;
+						}
+						if (additionalFields.httpConfig) {
+							const httpConfigObj = additionalFields.httpConfig as IDataObject;
+							const config = (httpConfigObj.config as IDataObject[])?.[0];
+							if (config) {
+								const httpConfig: IDataObject = {};
+								if (config.method) {
+									httpConfig.method = config.method;
+								}
+								if (config.timeoutSeconds) {
+									httpConfig.timeout_seconds = config.timeoutSeconds;
+								}
+								if (config.headers) {
+									const headersObj = config.headers as IDataObject;
+									const headerPairs = (headersObj.headerValues as IDataObject[]) || [];
+									if (headerPairs.length > 0) {
+										const headers: Record<string, string> = {};
+										for (const pair of headerPairs) {
+											headers[pair.key as string] = pair.value as string;
+										}
+										httpConfig.headers = headers;
+									}
+								}
+								if (config.params) {
+									const paramsObj = config.params as IDataObject;
+									const paramPairs = (paramsObj.paramValues as IDataObject[]) || [];
+									if (paramPairs.length > 0) {
+										const params: Record<string, string> = {};
+										for (const pair of paramPairs) {
+											params[pair.key as string] = pair.value as string;
+										}
+										httpConfig.params = params;
+									}
+								}
+								body.http_config = httpConfig;
+							}
+						}
+
+						responseData = await hindsightApiRequest.call(
+							this,
+							'POST',
+							`/v1/default/banks/${bankId}/webhooks`,
+							body,
+						);
+					} else if (operation === 'list') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/webhooks`,
+						);
+					} else if (operation === 'update') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const webhookId = this.getNodeParameter('webhookId', i) as string;
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+
+						const body: IDataObject = {};
+
+						if (additionalFields.url) {
+							body.url = additionalFields.url;
+						}
+						if (additionalFields.secret) {
+							body.secret = additionalFields.secret;
+						}
+						if (
+							additionalFields.eventTypes &&
+							(additionalFields.eventTypes as string[]).length > 0
+						) {
+							body.event_types = additionalFields.eventTypes;
+						}
+						if (additionalFields.enabled !== undefined) {
+							body.enabled = additionalFields.enabled;
+						}
+						if (additionalFields.httpConfig) {
+							const httpConfigObj = additionalFields.httpConfig as IDataObject;
+							const config = (httpConfigObj.config as IDataObject[])?.[0];
+							if (config) {
+								const httpConfig: IDataObject = {};
+								if (config.method) {
+									httpConfig.method = config.method;
+								}
+								if (config.timeoutSeconds) {
+									httpConfig.timeout_seconds = config.timeoutSeconds;
+								}
+								if (config.headers) {
+									const headersObj = config.headers as IDataObject;
+									const headerPairs = (headersObj.headerValues as IDataObject[]) || [];
+									if (headerPairs.length > 0) {
+										const headers: Record<string, string> = {};
+										for (const pair of headerPairs) {
+											headers[pair.key as string] = pair.value as string;
+										}
+										httpConfig.headers = headers;
+									}
+								}
+								if (config.params) {
+									const paramsObj = config.params as IDataObject;
+									const paramPairs = (paramsObj.paramValues as IDataObject[]) || [];
+									if (paramPairs.length > 0) {
+										const params: Record<string, string> = {};
+										for (const pair of paramPairs) {
+											params[pair.key as string] = pair.value as string;
+										}
+										httpConfig.params = params;
+									}
+								}
+								body.http_config = httpConfig;
+							}
+						}
+
+						responseData = await hindsightApiRequest.call(
+							this,
+							'PATCH',
+							`/v1/default/banks/${bankId}/webhooks/${webhookId}`,
+							body,
+						);
+					} else if (operation === 'delete') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const webhookId = this.getNodeParameter('webhookId', i) as string;
+						responseData = await hindsightApiRequest.call(
+							this,
+							'DELETE',
+							`/v1/default/banks/${bankId}/webhooks/${webhookId}`,
+						);
+					} else if (operation === 'listDeliveries') {
+						const bankId = this.getNodeParameter('bankId', i) as string;
+						const webhookId = this.getNodeParameter('webhookId', i) as string;
+						const additionalFields = this.getNodeParameter(
+							'additionalFields',
+							i,
+						) as IDataObject;
+						const qs: Record<string, string | number | boolean | undefined> = {};
+						if (additionalFields.limit) {
+							qs.limit = additionalFields.limit as number;
+						}
+						if (additionalFields.cursor) {
+							qs.cursor = additionalFields.cursor as string;
+						}
+						responseData = await hindsightApiRequest.call(
+							this,
+							'GET',
+							`/v1/default/banks/${bankId}/webhooks/${webhookId}/deliveries`,
+							undefined,
+							qs,
 						);
 					}
 				}
