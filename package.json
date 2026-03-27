@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-hindsight",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "n8n community node for Hindsight AI memory API by Vectorize.io",
 	"license": "MIT",
 	"homepage": "https://github.com/fredfrom/n8n-nodes-hindsight",
