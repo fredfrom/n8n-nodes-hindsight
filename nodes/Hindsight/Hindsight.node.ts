@@ -682,7 +682,7 @@ export class Hindsight implements INodeType {
 							`/v1/default/banks/${bankId}/operations/${operationId}/retry`,
 						);
 					}
-				} } else if (resource === 'mentalModel') {
+				} else if (resource === 'mentalModel') {
 					if (operation === 'create') {
 						const bankId = this.getNodeParameter('bankId', i) as string;
 						const name = this.getNodeParameter('name', i) as string;
@@ -827,7 +827,7 @@ export class Hindsight implements INodeType {
 							body,
 						);
 					}
-				
+				}
 
 				const executionData = this.helpers.constructExecutionMetaData(
 					this.helpers.returnJsonArray(responseData as IDataObject | IDataObject[]),
