@@ -4,6 +4,10 @@ An [n8n](https://n8n.io/) community node package for the [Hindsight](https://www
 
 This node gives n8n workflow builders access to Hindsight's AI memory system -- storing, searching, and reflecting on memories organized into banks -- directly from automation workflows.
 
+The package includes two nodes:
+- **Hindsight** -- Full API access (46 operations across 8 resources). Use as a regular node or as a tool for AI agents.
+- **Hindsight Memory** -- AI Agent memory sub-node. Plugs into the Agent's memory slot for automatic conversation history backed by Hindsight's semantic memory.
+
 ## Installation
 
 Install in your n8n instance's custom extensions directory:
@@ -170,6 +174,33 @@ Register webhooks to receive event notifications from Hindsight.
 1. Select **Resource: Webhook**, **Operation: Create**.
 2. Enter the **Bank ID** and the delivery **URL** (e.g., `https://example.com/hook`).
 3. Under **Additional Fields**, optionally set **Event Types** (`consolidation.completed`, `retain.completed`), a **Secret** for HMAC verification, and **HTTP Config** for custom method, timeout, headers, or query parameters.
+
+## Hindsight Memory (AI Agent Memory)
+
+The **Hindsight Memory** node provides automatic conversation history for n8n's AI Agent node, backed by Hindsight's semantic memory system.
+
+### Setup
+
+1. Add an **AI Agent** node to your workflow.
+2. Connect a **Hindsight Memory** node to the Agent's **Memory** input slot.
+3. Configure the memory node:
+   - **Bank ID** -- Which Hindsight bank to store conversations in.
+   - **Session ID** -- How to identify conversation threads. Use `fromInput` (auto-detected from Chat Trigger) or `customKey` for a fixed session key.
+   - **Context Window Length** -- Number of recent messages to include (default: 10).
+
+### How it works
+
+- **On each turn**, the agent's messages are stored in Hindsight via the Retain API, tagged with the session ID.
+- **Before each response**, recent conversation history is recalled from Hindsight using tag-scoped search.
+- Hindsight automatically extracts entities, facts, and observations from the conversation -- building long-term semantic memory beyond the chat window.
+
+### Example workflow
+
+```
+Chat Trigger → AI Agent (with Hindsight Memory + OpenAI Chat Model)
+```
+
+The agent remembers conversation context across messages, with Hindsight providing the persistence layer. Unlike simple buffer memory, Hindsight's semantic processing means the agent builds genuine understanding over time.
 
 ## API Documentation
 
