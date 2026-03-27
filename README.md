@@ -172,22 +172,6 @@ A test workflow is included at [`examples/test-workflow.json`](examples/test-wor
 
 The workflow tests: Bank Create --> List --> Get Profile --> Get Stats --> Memory Retain --> Recall --> Reflect --> Directive Create --> Bank Delete.
 
-## Publishing
-
-Releases are automated via GitHub Actions. To publish a new version:
-
-```bash
-# Bump version
-npm version patch  # or minor, major
-
-# Push with tag
-git push && git push --tags
-```
-
-The [publish workflow](.github/workflows/publish.yml) builds, lints, and publishes to npm on any `v*` tag.
-
-**Prerequisites:** Add `NPM_TOKEN` to your GitHub repository secrets (Settings > Secrets > Actions).
-
 ## Links
 
 - [Hindsight API Documentation](https://hindsight.vectorize.io/)
