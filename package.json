@@ -35,7 +35,8 @@
 			"dist/credentials/HindsightApi.credentials.js"
 		],
 		"nodes": [
-			"dist/nodes/Hindsight/Hindsight.node.js"
+			"dist/nodes/Hindsight/Hindsight.node.js",
+			"dist/nodes/HindsightMemory/HindsightMemory.node.js"
 		]
 	},
 	"devDependencies": {
