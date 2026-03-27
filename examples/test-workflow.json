@@ -1,0 +1,287 @@
+{
+  "name": "Hindsight - Test All Operations",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "start",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "bank",
+        "operation": "createOrUpdate",
+        "bankId": "test-bank",
+        "additionalFields": {
+          "name": "Test Bank",
+          "mission": "A test bank for verifying the Hindsight n8n node"
+        }
+      },
+      "id": "bank-create",
+      "name": "Bank: Create",
+      "type": "n8n-nodes-hindsight.hindsight",
+      "typeVersion": 1,
+      "position": [
+        300,
+        0
+      ],
+      "credentials": {
+        "hindsightApi": {
+          "id": "",
+          "name": "Hindsight API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "bank",
+        "operation": "list"
+      },
+      "id": "bank-list",
+      "name": "Bank: List",
+      "type": "n8n-nodes-hindsight.hindsight",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -200
+      ],
+      "credentials": {
+        "hindsightApi": {
+          "id": "",
+          "name": "Hindsight API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "bank",
+        "operation": "getProfile",
+        "bankId": "test-bank"
+      },
+      "id": "bank-profile",
+      "name": "Bank: Get Profile",
+      "type": "n8n-nodes-hindsight.hindsight",
+      "typeVersion": 1,
+      "position": [
+        600,
+        0
+      ],
+      "credentials": {
+        "hindsightApi": {
+          "id": "",
+          "name": "Hindsight API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "bank",
+        "operation": "getStats",
+        "bankId": "test-bank"
+      },
+      "id": "bank-stats",
+      "name": "Bank: Get Stats",
+      "type": "n8n-nodes-hindsight.hindsight",
+      "typeVersion": 1,
+      "position": [
+        600,
+        200
+      ],
+      "credentials": {
+        "hindsightApi": {
+          "id": "",
+          "name": "Hindsight API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "memory",
+        "operation": "retain",
+        "bankId": "test-bank",
+        "content": "The project kickoff meeting was on March 15. Key decisions: use TypeScript, deploy on Vercel, target Q2 launch."
+      },
+      "id": "memory-retain",
+      "name": "Memory: Retain",
+      "type": "n8n-nodes-hindsight.hindsight",
+      "typeVersion": 1,
+      "position": [
+        900,
+        -100
+      ],
+      "credentials": {
+        "hindsightApi": {
+          "id": "",
+          "name": "Hindsight API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "memory",
+        "operation": "recall",
+        "bankId": "test-bank",
+        "query": "What were the key decisions from the kickoff?"
+      },
+      "id": "memory-recall",
+      "name": "Memory: Recall",
+      "type": "n8n-nodes-hindsight.hindsight",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        -200
+      ],
+      "credentials": {
+        "hindsightApi": {
+          "id": "",
+          "name": "Hindsight API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "memory",
+        "operation": "reflect",
+        "bankId": "test-bank",
+        "query": "Summarize what you know about this project"
+      },
+      "id": "memory-reflect",
+      "name": "Memory: Reflect",
+      "type": "n8n-nodes-hindsight.hindsight",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        0
+      ],
+      "credentials": {
+        "hindsightApi": {
+          "id": "",
+          "name": "Hindsight API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "directive",
+        "operation": "create",
+        "bankId": "test-bank",
+        "name": "test-directive",
+        "content": "Always respond with concise bullet points"
+      },
+      "id": "directive-create",
+      "name": "Directive: Create",
+      "type": "n8n-nodes-hindsight.hindsight",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        200
+      ],
+      "credentials": {
+        "hindsightApi": {
+          "id": "",
+          "name": "Hindsight API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "bank",
+        "operation": "delete",
+        "bankId": "test-bank"
+      },
+      "id": "bank-delete",
+      "name": "Bank: Delete (cleanup)",
+      "type": "n8n-nodes-hindsight.hindsight",
+      "typeVersion": 1,
+      "position": [
+        1500,
+        0
+      ],
+      "credentials": {
+        "hindsightApi": {
+          "id": "",
+          "name": "Hindsight API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Bank: Create",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bank: Create": {
+      "main": [
+        [
+          {
+            "node": "Bank: List",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bank: Get Profile",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bank: Get Stats",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Memory: Retain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory: Retain": {
+      "main": [
+        [
+          {
+            "node": "Memory: Recall",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Memory: Reflect",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Directive: Create",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory: Recall": {
+      "main": [
+        [
+          {
+            "node": "Bank: Delete (cleanup)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

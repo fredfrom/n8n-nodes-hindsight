@@ -1,211 +1,199 @@
 # n8n-nodes-hindsight
 
-An [n8n](https://n8n.io/) community node package for the [Hindsight](https://www.vectorize.io/) AI memory API by Vectorize.io.
+[![npm version](https://img.shields.io/npm/v/n8n-nodes-hindsight.svg)](https://www.npmjs.com/package/n8n-nodes-hindsight)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This node gives n8n workflow builders access to Hindsight's AI memory system -- storing, searching, and reflecting on memories organized into banks -- directly from automation workflows.
+An [n8n](https://n8n.io/) community node package for the [Hindsight](https://hindsight.vectorize.io/) AI memory API by [Vectorize.io](https://www.vectorize.io/).
 
-The package includes two nodes:
-- **Hindsight** -- Full API access (46 operations across 8 resources). Use as a regular node or as a tool for AI agents.
+Give your n8n workflows persistent AI memory -- store, search, and reflect on memories organized into banks.
+
+**Two nodes included:**
+
+- **Hindsight** -- Full API access with 46 operations across 8 resources. Works as a regular node or as a tool for AI agents (`usableAsTool: true`).
 - **Hindsight Memory** -- AI Agent memory sub-node. Plugs into the Agent's memory slot for automatic conversation history backed by Hindsight's semantic memory.
 
 ## Installation
 
-Install in your n8n instance's custom extensions directory:
+### Community Nodes (recommended)
+
+1. Open your n8n instance
+2. Go to **Settings > Community Nodes**
+3. Select **Install**
+4. Enter `n8n-nodes-hindsight`
+5. Agree to the risks and install
+
+### Manual installation
 
 ```bash
-cd ~/.n8n/custom
+cd ~/.n8n/nodes
 npm install n8n-nodes-hindsight
 ```
 
-Then restart n8n. The Hindsight node will appear in the node palette.
+Restart n8n after installation.
 
-## Credential Setup
+## Credentials
 
-1. In n8n, go to **Settings > Credentials > Add Credential**.
-2. Search for **Hindsight API** and select it.
-3. Fill in the fields:
-   - **API Key** -- Your Hindsight API key. Leave empty for self-hosted instances running without authentication.
-   - **Base URL** -- The Hindsight API base URL. Defaults to `http://localhost:8888`.
-4. Click **Test** to verify the connection (calls `GET /v1/default/banks`).
-5. Click **Save**.
+1. Go to **Settings > Credentials > Add Credential**
+2. Search for **Hindsight API**
+3. Configure:
+   - **API Key** -- Your Hindsight API key (leave empty for self-hosted without auth)
+   - **Base URL** -- Defaults to `http://localhost:8888`. For Hindsight Cloud use `https://api.hindsight.vectorize.io`
+4. Click **Test** to verify, then **Save**
 
 ## Resources and Operations
 
 ### Bank
 
-Manage memory banks -- the top-level containers for all Hindsight data.
+Manage memory banks -- top-level containers for all Hindsight data.
 
 | Operation | Description |
 |-----------|-------------|
 | Clear Observations | Remove all observations from a bank |
 | Consolidate | Trigger observation synthesis |
-| Create or Update | Create a new bank or update an existing one |
+| Create or Update | Create or update a bank (upsert) |
 | Delete | Delete a bank and all its data |
 | Get Config | Get resolved bank configuration |
-| Get Profile | Get bank profile |
+| Get Profile | Get bank profile and disposition |
 | Get Stats | Get bank statistics |
 | List | List all banks |
 | List Tags | List tags with counts |
-| Reset Config | Reset bank config to server defaults |
-| Update Config | Update bank configuration overrides |
+| Reset Config | Reset config to server defaults |
+| Update Config | Update configuration overrides |
 | Update Disposition | Set personality traits (skepticism, literalism, empathy) |
-
-**Example -- Create a bank:**
-1. Add the Hindsight node to your workflow.
-2. Select **Resource: Bank** and **Operation: Create or Update**.
-3. Enter a **Bank ID** (e.g., `my-project`).
-4. Under **Additional Fields**, add a **Name** and **Mission**.
-5. Execute the node.
 
 ### Memory
 
-Store and retrieve memories using retain, recall, and reflect.
+Store and retrieve memories.
 
 | Operation | Description |
 |-----------|-------------|
-| Clear | Delete all memories in a bank (optional type filter) |
+| Clear | Delete memories (optional type filter) |
 | Clear Observations | Clear observations for a specific memory |
 | Get | Get a specific memory by ID |
 | List | List memories with optional filtering |
 | Recall | Semantic search across memories |
-| Reflect | AI-generated reflection on memories |
+| Reflect | AI-generated response grounded in memories |
 | Retain | Store new content as a memory |
-
-**Example -- Retain and Recall:**
-1. **Retain:** Select **Resource: Memory**, **Operation: Retain**. Enter your **Bank ID** and the **Content** to store. Optionally add tags and metadata under **Additional Fields**.
-2. **Recall:** Select **Resource: Memory**, **Operation: Recall**. Enter your **Bank ID** and a **Query**. The API returns semantically relevant memories.
-3. **Reflect:** Select **Resource: Memory**, **Operation: Reflect**. Enter your **Bank ID** and a **Query**. The API returns an AI-synthesized reflection based on stored memories.
 
 ### Directive
 
-Create rules that shape how Hindsight processes and reflects on memories.
+Rules that shape how Hindsight processes and reflects.
 
 | Operation | Description |
 |-----------|-------------|
-| Create | Create a new directive |
+| Create | Create a directive |
 | Delete | Delete a directive |
-| Get | Get a specific directive |
+| Get | Get a directive |
 | List | List all directives in a bank |
 | Update | Update a directive |
 
-**Example -- Create a directive:**
-1. Select **Resource: Directive**, **Operation: Create**.
-2. Enter the **Bank ID**, a **Name** (e.g., `tone-guide`), and the **Content** (e.g., `Always respond in a professional tone`).
-3. Optionally set **Priority** and **Tags** under **Additional Fields**.
-
 ### Mental Model
 
-Define persistent, auto-refreshing knowledge summaries derived from memories.
+Persistent, auto-refreshing knowledge summaries.
 
 | Operation | Description |
 |-----------|-------------|
-| Create | Create a new mental model |
+| Create | Create a mental model |
 | Delete | Delete a mental model |
-| Get | Get a specific mental model |
+| Get | Get a mental model |
 | Get History | Get revision history |
-| List | List all mental models in a bank |
+| List | List mental models in a bank |
 | Refresh | Trigger a manual refresh |
 | Update | Update a mental model |
 
-**Example -- Create a mental model:**
-1. Select **Resource: Mental Model**, **Operation: Create**.
-2. Enter the **Bank ID**, a **Name** (e.g., `customer-preferences`), and a **Source Query** (e.g., `What are the customer's preferences and habits?`).
-3. The model auto-refreshes after consolidation by default.
-
 ### Document
 
-Manage documents that group related memories.
+Manage source documents that group related memories.
 
 | Operation | Description |
 |-----------|-------------|
-| Delete | Delete a document |
-| Get | Get a specific document |
-| List | List documents with optional search and tag filters |
-| Update Tags | Update tags on a document |
-
-**Example -- List documents with a tag filter:**
-1. Select **Resource: Document**, **Operation: List**.
-2. Enter the **Bank ID**.
-3. Under **Additional Fields**, enter **Tags** (e.g., `meeting-notes`) and set **Tags Match** to `all` or `any`.
+| Delete | Delete a document and its memories |
+| Get | Get document details |
+| List | List documents with search and tag filters |
+| Update Tags | Update document tags |
 
 ### Entity
 
-View entities that Hindsight has automatically extracted from memories.
+Browse entities extracted from memories.
 
 | Operation | Description |
 |-----------|-------------|
-| Get | Get a specific entity |
+| Get | Get entity details |
 | List | List entities in a bank |
-
-**Example -- List entities:**
-1. Select **Resource: Entity**, **Operation: List**.
-2. Enter the **Bank ID**.
-3. Optionally set **Limit** and **Offset** under **Additional Fields** for pagination.
 
 ### Operation
 
-Monitor and manage async operations (retain jobs, consolidation tasks).
+Track async jobs (retain, consolidation).
 
 | Operation | Description |
 |-----------|-------------|
 | Cancel | Cancel a pending operation |
-| Get | Get a specific operation |
+| Get | Get operation status |
 | List | List operations in a bank |
 | Retry | Retry a failed operation |
 
-**Example -- Monitor operations:**
-1. Select **Resource: Operation**, **Operation: List**.
-2. Enter the **Bank ID**.
-3. Review the status of recent async tasks.
-
 ### Webhook
 
-Register webhooks to receive event notifications from Hindsight.
+Event-driven notifications from Hindsight.
 
 | Operation | Description |
 |-----------|-------------|
-| Create | Register a new webhook |
+| Create | Register a webhook |
 | Delete | Delete a webhook |
-| List | List all webhooks in a bank |
-| List Deliveries | View delivery attempts for a webhook |
+| List | List webhooks in a bank |
+| List Deliveries | View delivery attempts |
 | Update | Update a webhook |
 
-**Example -- Create a webhook:**
-1. Select **Resource: Webhook**, **Operation: Create**.
-2. Enter the **Bank ID** and the delivery **URL** (e.g., `https://example.com/hook`).
-3. Under **Additional Fields**, optionally set **Event Types** (`consolidation.completed`, `retain.completed`), a **Secret** for HMAC verification, and **HTTP Config** for custom method, timeout, headers, or query parameters.
+## Hindsight Memory (AI Agent)
 
-## Hindsight Memory (AI Agent Memory)
-
-The **Hindsight Memory** node provides automatic conversation history for n8n's AI Agent node, backed by Hindsight's semantic memory system.
+The **Hindsight Memory** node plugs into n8n's AI Agent memory slot.
 
 ### Setup
 
-1. Add an **AI Agent** node to your workflow.
-2. Connect a **Hindsight Memory** node to the Agent's **Memory** input slot.
-3. Configure the memory node:
-   - **Bank ID** -- Which Hindsight bank to store conversations in.
-   - **Session ID** -- How to identify conversation threads. Use `fromInput` (auto-detected from Chat Trigger) or `customKey` for a fixed session key.
-   - **Context Window Length** -- Number of recent messages to include (default: 10).
+1. Add an **AI Agent** node
+2. Connect **Hindsight Memory** to the Agent's **Memory** input
+3. Configure: **Bank ID**, **Session ID** source, **Context Window Length** (default: 10)
 
 ### How it works
 
-- **On each turn**, the agent's messages are stored in Hindsight via the Retain API, tagged with the session ID.
-- **Before each response**, recent conversation history is recalled from Hindsight using tag-scoped search.
-- Hindsight automatically extracts entities, facts, and observations from the conversation -- building long-term semantic memory beyond the chat window.
-
-### Example workflow
+- Each conversation turn is stored via the Retain API, tagged with the session ID
+- Before each response, recent history is recalled using tag-scoped search
+- Hindsight extracts entities, facts, and observations automatically -- building long-term semantic memory beyond the chat window
 
 ```
-Chat Trigger → AI Agent (with Hindsight Memory + OpenAI Chat Model)
+Chat Trigger --> AI Agent (with Hindsight Memory + LLM)
 ```
 
-The agent remembers conversation context across messages, with Hindsight providing the persistence layer. Unlike simple buffer memory, Hindsight's semantic processing means the agent builds genuine understanding over time.
+> **Note:** The Hindsight Memory node requires `@n8n/ai-node-sdk` which may not be available in all n8n installations. If it fails to load, use the main Hindsight node as a tool instead.
 
-## API Documentation
+## Test Workflow
 
-For full API details, see the [Hindsight API documentation](https://docs.vectorize.io/).
+A test workflow is included at [`examples/test-workflow.json`](examples/test-workflow.json). Import it into n8n to verify all operations work with your Hindsight instance.
+
+The workflow tests: Bank Create --> List --> Get Profile --> Get Stats --> Memory Retain --> Recall --> Reflect --> Directive Create --> Bank Delete.
+
+## Publishing
+
+Releases are automated via GitHub Actions. To publish a new version:
+
+```bash
+# Bump version
+npm version patch  # or minor, major
+
+# Push with tag
+git push && git push --tags
+```
+
+The [publish workflow](.github/workflows/publish.yml) builds, lints, and publishes to npm on any `v*` tag.
+
+**Prerequisites:** Add `NPM_TOKEN` to your GitHub repository secrets (Settings > Secrets > Actions).
+
+## Links
+
+- [Hindsight API Documentation](https://hindsight.vectorize.io/)
+- [Hindsight GitHub](https://github.com/vectorize-io/hindsight)
+- [n8n Community Nodes](https://docs.n8n.io/integrations/community-nodes/)
 
 ## License
 
-MIT
+[MIT](LICENSE.md)

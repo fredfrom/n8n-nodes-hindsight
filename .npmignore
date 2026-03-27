@@ -1,0 +1,16 @@
+# Source (dist/ is shipped via "files" in package.json)
+nodes/
+credentials/
+*.ts
+
+# Config
+tsconfig.json
+eslint.config.mjs
+.prettierrc.js
+.github/
+.gitignore
+
+# Local
+.planning/
+.claude/
+CLAUDE.md
