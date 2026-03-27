@@ -1,0 +1,17 @@
+{
+	"node": "n8n-nodes-hindsight.hindsightMemory",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["AI"],
+	"subcategories": {
+		"AI": ["Memory"],
+		"Memory": ["Other memories"]
+	},
+	"resources": {
+		"primaryDocumentation": [
+			{
+				"url": "https://hindsight.vectorize.io"
+			}
+		]
+	}
+}
