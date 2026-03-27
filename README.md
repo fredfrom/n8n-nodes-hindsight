@@ -7,7 +7,10 @@ An [n8n](https://n8n.io/) community node package for the [Hindsight](https://hin
 
 Give your n8n workflows persistent AI memory -- store, search, and reflect on memories organized into banks.
 
-46 operations across 8 resources. Works as a regular node or as a tool for AI agents (`usableAsTool: true`).
+**Two nodes included:**
+
+- **Hindsight** -- 46 operations across 8 resources. Works as a regular node or as a tool for AI agents (`usableAsTool: true`).
+- **Hindsight Memory** -- AI Agent memory sub-node. Plugs into the Agent's memory slot for persistent conversation history backed by Hindsight's semantic memory.
 
 ## Installation
 
@@ -140,6 +143,26 @@ Event-driven notifications from Hindsight.
 | List | List webhooks in a bank |
 | List Deliveries | View delivery attempts |
 | Update | Update a webhook |
+
+## Hindsight Memory (AI Agent)
+
+The **Hindsight Memory** node plugs into n8n's AI Agent memory slot, giving your agents persistent semantic memory.
+
+### Setup
+
+1. Add an **AI Agent** node to your workflow
+2. Connect a **Hindsight Memory** node to the Agent's **Memory** input
+3. Configure: **Bank ID**, **Session ID** source, **Context Window Length** (default: 10)
+
+### How it works
+
+- Each conversation turn is stored via the Retain API, tagged with the session ID
+- Before each response, recent history is recalled using tag-scoped search
+- Hindsight extracts entities, facts, and observations automatically -- building long-term semantic memory beyond the chat window
+
+```
+Chat Trigger --> AI Agent (with Hindsight Memory + LLM)
+```
 
 ## Test Workflow
 
