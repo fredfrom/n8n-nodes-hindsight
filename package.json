@@ -35,12 +35,10 @@
 			"dist/credentials/HindsightApi.credentials.js"
 		],
 		"nodes": [
-			"dist/nodes/Hindsight/Hindsight.node.js",
-			"dist/nodes/HindsightMemory/HindsightMemory.node.js"
+			"dist/nodes/Hindsight/Hindsight.node.js"
 		]
 	},
 	"devDependencies": {
-		"@n8n/ai-node-sdk": "*",
 		"@n8n/node-cli": "*",
 		"eslint": "9.39.4",
 		"prettier": "3.8.1",
@@ -48,7 +46,6 @@
 		"typescript": "5.9.3"
 	},
 	"peerDependencies": {
-		"@n8n/ai-node-sdk": "*",
 		"n8n-workflow": "*"
 	}
 }
